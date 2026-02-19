@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Vui Xuân – Đón Tết Đà Rồng | Chẵn – Lẻ – 0</title>
+  <style>
+    :root{
+      --red1:#7a0b0b; --red2:#b31212; --red3:#d81b1b;
+      --gold1:#ffdf7a; --gold2:#ffd24d; --gold3:#ffefb6;
+      --ink:#2b0a0a;
+      --card: rgba(122,11,11,.55);
+      --line: rgba(255,210,77,.45);
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue", sans-serif;
+      background: radial-gradient(1200px 600px at 50% -10%, #ffefb6 0%, rgba(255,239,182,0) 55%),
+                  linear-gradient(180deg, var(--red1), var(--red2) 55%, var(--red1));
+      color: var(--gold3);
+    }
+    .wrap{ max-width: 520px; margin: 0 auto; padding: 16px; }
+    .header{
+      display:flex; gap:12px; align-items:center; margin-bottom:12px;
+    }
+    .logo{
+      width:56px; height:56px; border-radius:18px;
+      background: rgba(255,210,77,.92);
+      display:flex; align-items:center; justify-content:center;
+      overflow:hidden; box-shadow: 0 10px 24px rgba(0,0,0,.25);
+      border: 1px solid rgba(255,255,255,.15);
+      flex: 0 0 auto;
+    }
+    .logo img{ width:100%; height:100%; object-fit:cover; }
+    .title{ flex:1; }
+    .title h1{ margin:0; font-size: 20px; line-height:1.15; }
+    .title .sub{ opacity:.9; font-size: 13px; margin-top:4px; }
+
+    .card{
+      background: var(--card);
+      border: 2px solid rgba(255,210,77,.65);
+      border-radius: 20px;
+      padding: 14px;
+      box-shadow: 0 16px 40px rgba(0,0,0,.28);
+      backdrop-filter: blur(6px);
+    }
+    .section{
+      background: rgba(0,0,0,.12);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px;
+      margin-top: 10px;
+    }
+    .row{ display:flex; gap:10px; align-items:center; }
+    .row.space{ justify-content:space-between; }
+    .label{ font-weight: 650; color: var(--gold3); }
+    .muted{ opacity:.88; font-size: 12px; }
+    input, textarea{
+      width:100%;
+      border: none;
+      border-radius: 14px;
+      padding: 10px 12px;
+      outline: none;
+      background: rgba(255,239,182,.95);
+      color: var(--ink);
+      font-size: 14px;
+    }
+    textarea{ min-height: 92px; resize: vertical; }
+    .btnbar{ display:flex; gap:8px; }
+    button{
+      border: 1px solid rgba(255,210,77,.55);
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-weight: 750;
+      background: rgba(255,239,182,.14);
+      color: var(--gold3);
+      cursor: pointer;
+      width: 100%;
+    }
+    button.primary{
+      background: linear-gradient(180deg, rgba(255,210,77,.95), rgba(255,223,122,.95));
+      color: #6b0f0f;
+      border-color: rgba(255,255,255,.25);
+      font-size: 16px;
+    }
+    button.active{
+      background: rgba(255,210,77,.95);
+      color: #6b0f0f;
+    }
+    button:disabled{ opacity:.65; cursor:not-allowed; }
+    .grid3{ display:grid; grid-template-columns: repeat(3, 1fr); gap:8px; }
+    .tile{
+      background: rgba(255,239,182,.95);
+      color: #6b0f0f;
+      border-radius: 16px;
+      padding: 10px 8px;
+      text-align:center;
+      transform: scale(1);
+      transition: transform .2s ease, opacity .2s ease;
+      box-shadow: 0 10px 22px rgba(0,0,0,.18);
+      min-height: 62px;
+      display:flex; flex-direction:column; justify-content:center;
+    }
+    .tile .name{ font-weight: 850; font-size: 14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .tile .idx{ font-size: 12px; opacity:.9; margin-top:3px; }
+
+    .resultBox{ text-align:center; margin-top: 10px; }
+    .resultBox .big{ font-size: 22px; font-weight: 900; }
+    .badge{
+      display:inline-block; padding: 6px 10px; border-radius: 999px;
+      background: rgba(255,210,77,.95); color: #6b0f0f; font-weight: 900;
+      margin-top: 6px;
+    }
+    .win{ margin-top: 6px; font-weight: 800; }
+    .history{
+      max-height: 280px;
+      overflow:auto;
+      padding-right: 4px;
+    }
+    .hitem{
+      border: 1px solid rgba(255,210,77,.25);
+      border-radius: 16px;
+      padding: 10px;
+      background: rgba(0,0,0,.10);
+      margin-top: 8px;
+    }
+    .hitem .top{ display:flex; justify-content:space-between; font-size: 12px; opacity:.9; }
+    .hitem .mid{ display:flex; flex-wrap:wrap; gap: 8px 12px; margin-top: 6px; font-size: 13px; }
+    .hitem .mid span b{ color: var(--gold2); }
+    .hitem .bot{ margin-top: 6px; font-size: 12px; opacity:.9; line-height:1.35; }
+    .footerNote{ margin-top: 10px; font-size: 12px; opacity:.85; text-align:center; }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="header">
+      <div class="logo" title="Logo Đà Rồng">
+        <!-- Nếu bạn upload file logo-darong.png vào repo, nó sẽ tự hiện -->
+        <img id="logoImg" src="logo-darong.png" alt="Logo" onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='block';">
+        <div id="logoFallback" style="display:none; font-weight:1000; color:#6b0f0f; font-size:20px;">DR</div>
+      </div>
+      <div class="title">
+        <h1>Vui Xuân – Đón Tết Đà Rồng</h1>
+        <div class="sub">Game xác suất: quay 3 nhân viên → tính tổng → Chẵn / Lẻ / 0</div>
+      </div>
+    </div>
+
+    <div class="card">
+
+      <div class="section">
+        <div class="row space">
+          <div>
+            <div class="label">Số dư</div>
+            <div class="muted">Mô phỏng trong game (lưu trên máy bạn)</div>
+          </div>
+          <div class="label" id="balanceText">0 đ</div>
+        </div>
+
+        <div style="height:8px"></div>
+
+        <div class="row" style="gap:8px;">
+          <div style="width:110px;" class="muted">Tiền cược</div>
+          <input id="stakeInput" type="number" min="0" step="1000" />
+        </div>
+        <div class="muted" style="margin-top:6px;">
+          Quy tắc: Trúng CHẴN/LẺ nhận đúng tiền cược; trúng SỐ 0 nhận x2.
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="label">Chọn cửa</div>
+        <div class="btnbar" style="margin-top:8px;">
+          <button id="betEven" onclick="setBet('even')">Chẵn</button>
+          <button id="betOdd" onclick="setBet('odd')">Lẻ</button>
+          <button id="betZero" onclick="setBet('zero')">0</button>
+        </div>
+
+        <div class="row space" style="margin-top:10px;">
+          <div>
+            <div class="label">Âm thanh</div>
+            <div class="muted">Trống khi quay, pháo khi trúng</div>
+          </div>
+          <button id="soundBtn" style="width:140px;" onclick="toggleSound()">Bật</button>
+        </div>
+
+        <!-- Audio (tuỳ chọn). Nếu bạn upload file vào đúng đường dẫn, sẽ phát được -->
+        <audio id="drumAudio" preload="auto" src="sfx/drum.mp3"></audio>
+        <audio id="fireAudio" preload="auto" src="sfx/firecracker.mp3"></audio>
+
+        <div style="height:10px"></div>
+        <button class="primary" id="spinBtn" onclick="spin()">Bắt đầu</button>
+      </div>
+
+      <div class="section">
+        <div class="label" style="text-align:center;">Kết quả quay</div>
+        <div style="height:8px"></div>
+
+        <div class="grid3" id="tiles">
+          <div class="tile"><div class="name">—</div><div class="idx">—</div></div>
+          <div class="tile"><div class="name">—</div><div class="idx">—</div></div>
+          <div class="tile"><div class="name">—</div><div class="idx">—</div></div>
+        </div>
+
+        <div class="resultBox" id="resultBox" style="display:none;">
+          <div>Tổng: <span class="big" id="sumText">0</span></div>
+          <div><span class="badge" id="outcomeBadge">—</span></div>
+          <div class="win" id="winText"></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="row space">
+          <div class="label">Lịch sử (tối đa 30 lượt)</div>
+          <button style="width:140px;" onclick="resetAll()">Reset</button>
+        </div>
+        <div class="history" id="history"></div>
+      </div>
+
+      <div class="section">
+        <div class="label">Danh sách nhân viên (mỗi dòng 1 tên)</div>
+        <div class="muted">Bạn có thể thêm/bớt. Game tự đánh số thứ tự từ 1…N theo đúng thứ tự dòng.</div>
+        <div style="height:8px"></div>
+        <textarea id="employeesArea"></textarea>
+        <div style="height:8px"></div>
+        <button onclick="applyEmployees()">Áp dụng danh sách</button>
+      </div>
+
+      <div class="footerNote">
+        Gợi ý: muốn có logo/âm thanh thật → upload <b>logo-darong.png</b> và thư mục <b>sfx/</b> vào repo.
+      </div>
+    </div>
+  </div>
+
+<script>
+  // ====== CẤU HÌNH MẶC ĐỊNH ======
+  const DEFAULT_EMPLOYEES = [
+    "Nhân viên 01","Nhân viên 02","Nhân viên 03","Nhân viên 04",
+    "Nhân viên 05","Nhân viên 06","Nhân viên 07","Nhân viên 08",
+    "Nhân viên 09","Nhân viên 10","Nhân viên 11","Nhân viên 12"
+  ];
+
+  const LS_KEY = "darong_tet_game_v1";
+
+  // ====== STATE ======
+  let state = {
+    employees: [...DEFAULT_EMPLOYEES],
+    bet: "",            // even | odd | zero
+    balance: 1000000,   // VND
+    stake: 50000,       // VND
+    soundOn: true,
+    history: [],        // newest first
+    spinning: false
+  };
+
+  function formatVND(n){
+    n = Number(n) || 0;
+    return new Intl.NumberFormat("vi-VN").format(n) + " đ";
+  }
+  function nowVN(){
+    return new Date().toLocaleString("vi-VN");
+  }
+
+  function save(){
+    localStorage.setItem(LS_KEY, JSON.stringify(state));
+  }
+  function load(){
+    try{
+      const raw = localStorage.getItem(LS_KEY);
+      if(!raw) return;
+      const obj = JSON.parse(raw);
+      if(obj && typeof obj === "object"){
+        state = { ...state, ...obj };
+      }
+    }catch(e){}
+  }
+
+  function render(){
+    // balance + stake
+    document.getElementById("balanceText").textContent = formatVND(state.balance);
+    const stakeInput = document.getElementById("stakeInput");
+    stakeInput.value = state.stake;
+
+    // bet buttons
+    const be = document.getElementById("betEven");
+    const bo = document.getElementById("betOdd");
+    const bz = document.getElementById("betZero");
+    [be,bo,bz].forEach(b=>b.classList.remove("active"));
+    if(state.bet === "even") be.classList.add("active");
+    if(state.bet === "odd")  bo.classList.add("active");
+    if(state.bet === "zero") bz.classList.add("active");
+
+    // sound
+    document.getElementById("soundBtn").textContent = state.soundOn ? "Bật" : "Tắt";
+
+    // employees textarea
+    document.getElementById("employeesArea").value = state.employees.join("\n");
+
+    // history
+    renderHistory();
+
+    // spinning lock
+    document.getElementById("spinBtn").disabled = state.spinning;
+    document.getElementById("stakeInput").disabled = state.spinning;
+    be.disabled = state.spinning; bo.disabled = state.spinning; bz.disabled = state.spinning;
+  }
+
+  function renderHistory(){
+    const box = document.getElementById("history");
+    box.innerHTML = "";
+    if(!state.history.length){
+      const d = document.createElement("div");
+      d.className = "muted";
+      d.textContent = "Chưa có lượt quay nào.";
+      box.appendChild(d);
+      return;
+    }
+    state.history.forEach(h=>{
+      const item = document.createElement("div");
+      item.className = "hitem";
+
+      const top = document.createElement("div");
+      top.className = "top";
+      top.innerHTML = `<div>${h.ts}</div><div style="font-weight:800;">${h.win ? "TRÚNG" : "TRƯỢT"}</div>`;
+
+      const mid = document.createElement("div");
+      mid.className = "mid";
+      mid.innerHTML = `
+        <span>Cửa: <b>${parityText(h.bet)}</b></span>
+        <span>Cược: <b>${formatVND(h.stake)}</b></span>
+        <span>KQ: <b>${parityText(h.outcome)}</b></span>
+        <span>Thưởng: <b>${formatVND(h.payout)}</b></span>
+      `;
+
+      const bot = document.createElement("div");
+      bot.className = "bot";
+      bot.textContent = `3 NV: ${h.picked.map(p=>`${p.name}(#${p.index})`).join(" – ")} · Tổng: ${h.total}`;
+
+      item.appendChild(top);
+      item.appendChild(mid);
+      item.appendChild(bot);
+      box.appendChild(item);
+    });
+  }
+
+  function parityText(p){
+    if(p==="even") return "CHẴN";
+    if(p==="odd") return "LẺ";
+    if(p==="zero") return "SỐ 0";
+    return "—";
+  }
+
+  function setBet(b){
+    state.bet = b;
+    save(); render();
+  }
+
+  function toggleSound(){
+    state.soundOn = !state.soundOn;
+    save(); render();
+  }
+
+  function applyEmployees(){
+    const raw = document.getElementById("employeesArea").value || "";
+    const arr = raw.split("\n").map(s=>s.trim()).filter(Boolean);
+    if(arr.length < 3){
+      alert("Danh sách phải có ít nhất 3 nhân viên.");
+      return;
+    }
+    state.employees = arr;
+    save(); render();
+  }
+
+  function classify(total){
+    const unit = ((total % 10) + 10) % 10;
+    if(unit === 0) return "zero";
+    return (unit % 2 === 0) ? "even" : "odd";
+  }
+
+  function pickThreeUnique(list){
+    const idxs = [...list.keys()];
+    for(let i=idxs.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [idxs[i], idxs[j]] = [idxs[j], idxs[i]];
+    }
+    return idxs.slice(0,3).map(i=>({ name:list[i], index:i+1 }));
+  }
+
+  function playAudio(id){
+    if(!state.soundOn) return;
+    const a = document.getElementById(id);
+    if(!a) return;
+    // Nếu file không tồn tại, play sẽ fail -> bỏ qua
+    a.currentTime = 0;
+    a.play().catch(()=>{});
+  }
+
+  function showTiles(picked){
+    const tiles = document.getElementById("tiles").children;
+    for(let i=0;i<3;i++){
+      tiles[i].style.opacity = "1";
+      tiles[i].style.transform = "scale(1)";
+      tiles[i].querySelector(".name").textContent = picked[i].name;
+      tiles[i].querySelector(".idx").textContent = "#" + picked[i].index;
+    }
+  }
+
+  function showSpinning(){
+    const tiles = document.getElementById("tiles").children;
+    for(let i=0;i<3;i++){
+      tiles[i].style.opacity = "0.95";
+      tiles[i].style.transform = "scale(0.98)";
+      tiles[i].querySelector(".name").textContent = "Đang quay…";
+      tiles[i].querySelector(".idx").textContent = "—";
+    }
+    document.getElementById("resultBox").style.display = "none";
+  }
+
+  function showResult(total, outcome, win, payout){
+    document.getElementById("sumText").textContent = total;
+    document.getElementById("outcomeBadge").textContent = parityText(outcome);
+    const winText = document.getElementById("winText");
+    if(win){
+      winText.textContent = (outcome==="zero") ? "🎉 Trúng lớn! Thưởng x2" : "🎉 Trúng thưởng";
+    }else{
+      winText.textContent = "Chưa trúng";
+    }
+    document.getElementById("resultBox").style.display = "block";
+  }
+
+  function spin(){
+    if(state.spinning) return;
+
+    // stake from input
+    const st = Math.max(0, Math.floor(Number(document.getElementById("stakeInput").value) || 0));
+    state.stake = st;
+
+    if(!state.bet){
+      alert("Vui lòng chọn cửa Chẵn / Lẻ / 0 trước khi bắt đầu.");
+      return;
+    }
+    if(st <= 0){
+      alert("Tiền cược phải > 0.");
+      return;
+    }
+    if(st > state.balance){
+      alert("Số dư không đủ để đặt cược.");
+      return;
+    }
+    if(state.employees.length < 3){
+      alert("Danh sách nhân viên phải có ít nhất 3 người.");
+      return;
+    }
+
+    state.spinning = true;
+    save(); render();
+    showSpinning();
+    playAudio("drumAudio");
+
+    // Thời gian quay ngẫu nhiên nhẹ
+    const duration = 1100 + Math.floor(Math.random()*700);
+
+    setTimeout(()=>{
+      const picked = pickThreeUnique(state.employees);
+      const total = picked.reduce((s,p)=>s+p.index, 0);
+      const outcome = classify(total);
+
+      // Trừ cược trước
+      let balanceAfterBet = state.balance - st;
+
+      // Tính thưởng
+      let win = (state.bet === outcome);
+      let payout = 0;
+      if(win){
+        payout = (outcome === "zero") ? (2*st) : st;
+        balanceAfterBet += payout;
+        playAudio("fireAudio");
+      }
+
+      state.balance = Math.max(0, balanceAfterBet);
+
+      // Lưu lịch sử
+      state.history.unshift({
+        ts: nowVN(),
+        bet: state.bet,
+        stake: st,
+        picked,
+        total,
+        outcome,
+        win,
+        payout
+      });
+      state.history = state.history.slice(0, 30);
+
+      // Render UI
+      showTiles(picked);
+      showResult(total, outcome, win, payout);
+
+      state.spinning = false;
+      save(); render();
+    }, duration);
+  }
+
+  function resetAll(){
+    if(!confirm("Reset toàn bộ (số dư, lịch sử, cược)?")) return;
+    state.balance = 1000000;
+    state.stake = 50000;
+    state.bet = "";
+    state.history = [];
+    state.spinning = false;
+    save(); render();
+
+    // reset tiles
+    const tiles = document.getElementById("tiles").children;
+    for(let i=0;i<3;i++){
+      tiles[i].querySelector(".name").textContent = "—";
+      tiles[i].querySelector(".idx").textContent = "—";
+    }
+    document.getElementById("resultBox").style.display = "none";
+  }
+
+  // Init
+  load();
+  render();
+</script>
+</body>
+</html>
